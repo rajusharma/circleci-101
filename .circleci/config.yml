@@ -1,8 +1,20 @@
 version: 2
 jobs:
-  build:
+  lint:
     docker:
-      - image: circleci/ruby:2.4.1
+      - image: alpine/helm
     steps:
       - checkout
-      - run: echo "A first hello"
+      - run:
+          name: Run helm lint for all chart directories
+          command: |
+            for c in $(find ./mercari -type d -maxdepth 1 -mindepth 1)
+            do
+              helm lint ${c}
+            done
+
+workflows:
+  version: 2
+  lint:
+    jobs:
+      - lint
