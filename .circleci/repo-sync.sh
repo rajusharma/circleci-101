@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -eu
 
@@ -25,6 +25,8 @@ setup_helm_client() {
 	tar xzfv "$HELM_TARBALL"
 
 	PATH="$(pwd)/linux-amd64/:$PATH"
+	helm init --client-only
+        helm repo add incubator "$STABLE_REPO_URL"
 }
 
 authenticate() {
