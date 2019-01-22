@@ -5,7 +5,7 @@ set -eu
 CHART_REPO="${1?Specify chart directory path}"
 
 readonly HELM_URL=https://storage.googleapis.com/kubernetes-helm
-readonly HELM_TARBALL=helm-v2.12.-linux-amd64.tar.gz
+readonly HELM_TARBALL=helm-v2.12.1-linux-amd64.tar.gz
 readonly MERCARI_CHART_REPO_URL=https://raju-charts.storage.googleapis.com/
 readonly GCS_BUCKET_MERCARI_CHARTS=gs://raju-charts
 
