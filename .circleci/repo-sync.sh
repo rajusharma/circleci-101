@@ -16,6 +16,7 @@ main() {
 
 	# Temporary directory to store the packaged charts which will be synced
 	local sync_dir="${LOCAL_CHARTS_DIR}-sync"
+	mkdir -p $sync_dir
 
 	# Iterate all the chart folder under chart repo and package them
 	for dir in "$LOCAL_CHARTS_DIR"/*; do
