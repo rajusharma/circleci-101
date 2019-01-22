@@ -19,8 +19,7 @@ jobs:
       - checkout
       - run:
           name: sync
-          command: |
-            .circleci/repo-sync.sh mercari
+          command: .circleci/repo-sync.sh mercari raju-charts
             
 workflows:
   version: 2
