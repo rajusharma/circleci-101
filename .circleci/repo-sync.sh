@@ -26,7 +26,7 @@ setup_helm_client() {
 
 	PATH="$(pwd)/linux-amd64/:$PATH"
 	helm init --client-only
-	helm repo add incubator "$MERCARI_CHART_REPO_URL"
+# 	helm repo add incubator "$MERCARI_CHART_REPO_URL"
 }
 
 authenticate() {
