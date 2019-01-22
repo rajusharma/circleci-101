@@ -1,13 +1,4 @@
 apiVersion: v1
 description: A Helm chart for kubernetes pull-request-replication-controller
 name: pull-request-replication-controller
-version: 0.1.1
-sources:
-- https://github.com/kouzoh/pull-request-replication-controller
-maintainers:
-  - name: vbanthia
-    email: vishal@mercari.com
-  - name: tcnksm
-    email: tcnksm@mercari.com
-  - name: masudak
-    email: masuda@mercari.com
+version: 0.1.２
