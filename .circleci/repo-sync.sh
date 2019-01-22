@@ -31,6 +31,7 @@ setup_helm_client() {
 
 authenticate() {
 	echo "Authenticating with Google Cloud..."
+	echo $CHARTMUSEUM_SERVICE_ACCOUNT_KEY
 	gcloud auth activate-service-account --key-file <(base64 --decode <<<"$CHARTMUSEUM_SERVICE_ACCOUNT_KEY")
 }
 
