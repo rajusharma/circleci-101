@@ -19,7 +19,7 @@ jobs:
       - checkout
       - run:
           name: sync
-          command: repo-sync.sh
+          command: repo-sync.sh mercari
 
 workflows:
   version: 2
