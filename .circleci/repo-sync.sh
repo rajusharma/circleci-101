@@ -10,7 +10,7 @@ readonly STABLE_REPO_URL=https://raju-charts.storage.googleapis.com/
 readonly GCS_BUCKET_STABLE=gs://raju-charts
 
 main() {
-	# setup_helm_client
+	setup_helm_client
 	# authenticate
 
 	if ! sync_repo $CHART_REPO "$GCS_BUCKET_STABLE" "$STABLE_REPO_URL"; then
@@ -25,9 +25,6 @@ setup_helm_client() {
 	tar xzfv "$HELM_TARBALL"
 
 	PATH="$(pwd)/linux-amd64/:$PATH"
-
-	helm init --client-only
-	helm repo add incubator "$INCUBATOR_REPO_URL"
 }
 
 authenticate() {
