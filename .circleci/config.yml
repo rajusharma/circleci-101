@@ -19,7 +19,10 @@ jobs:
       - checkout
       - run:
           name: sync
-          command: .circleci/repo-sync.sh mercari
+          command: |
+            touch .env
+            echo CHARTMUSEUM_SERVICE_ACCOUNT_KEY="${CHARTMUSEUM_SERVICE_ACCOUNT_KEY}" >> .env
+            .circleci/repo-sync.sh mercari
 
 workflows:
   version: 2
