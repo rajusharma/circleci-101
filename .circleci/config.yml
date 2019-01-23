@@ -33,3 +33,6 @@ workflows:
   sync:
     jobs:
       - sync
+        filters:
+          branches:
+            only: master
