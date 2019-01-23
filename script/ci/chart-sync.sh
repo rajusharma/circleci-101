@@ -34,13 +34,13 @@ main() {
   show_changed_dirs "${basedir}"
   # Temporary sync directory from which all the changed charts will be pushed to remote helm repo
   mkdir -p "${basedir}-sync"
-  echo "[INFO] Packaging the modified helm charts"
+  echo "[INFO] Packaging the modified helm charts and putting in ${basedir}-sync"
   for dir in $(changed_chart_dirs "${basedir}"); do
     if [ -d "${dir}" ]; then
       if helm dependency build "${dir}"; then
         helm package --destination "${basedir}-sync" "${dir}"
       else
-        echo "[ERROR] Problem building dependencies. Skipping packaging of '${dir}'."
+        echo "[ERROR] Problem building dependencies. Skipping packaging of '${dir}'"
         exit 1
       fi
     fi
@@ -48,8 +48,7 @@ main() {
   
   echo "[INFO] Syncing the modified helm charts"
   for file in "${basedir}-sync"/*; do
-    echo $file
-    # curl --data-binary @${file} https://mercari:$(eval echo \$${passwordkey})@chartmuseum.dev.citadelapps.com/api/charts
+    echo "curl --data-binary @${file} https://mercari:$(eval echo \$${passwordkey})@chartmuseum.dev.citadelapps.com/api/charts"
   done
   
 }

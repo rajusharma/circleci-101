@@ -14,13 +14,13 @@ jobs:
             done
   sync:
     docker:
-      - image: google/cloud-sdk
+      - image: alpine/helm
     steps:
       - checkout
       - run:
           name: sync
-          command: .circleci/repo-sync.sh mercari raju-charts
-            
+          command: script/ci/chart-sync mercari CHARTMUSEUM_PASSWORD_DEV
+
 workflows:
   version: 2
   lint:
