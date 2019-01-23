@@ -19,7 +19,8 @@ jobs:
       - checkout
       - run:
           name: sync
-          command: script/ci/chart-sync mercari CHARTMUSEUM_PASSWORD_DEV
+          command: |
+            script/ci/chart-sync mercari CHARTMUSEUM_PASSWORD_DEV
 
 workflows:
   version: 2
