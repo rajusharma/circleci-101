@@ -72,6 +72,7 @@ show_changed_dirs() {
   echo ""
 }
 
+# changed_dirs returns simply changed directories but changed_chart_dirs return only the folders which has
 changed_chart_dirs() {
   local basedir=${1}
   
