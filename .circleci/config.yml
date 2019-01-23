@@ -23,7 +23,7 @@ jobs:
       - run:
           name: sync
           command: |
-            script/ci/chart-sync mercari ${CHARTMUSEUM_PASSWORD_DEV}
+            script/ci/chart-sync mercari chartmuseum.dev.citadelapps.com/api/charts
 
 workflows:
   version: 2
