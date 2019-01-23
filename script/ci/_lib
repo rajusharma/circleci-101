@@ -1,0 +1,95 @@
+#!/bin/bash
+
+validate_arguments() {
+  if [[ $# -ne 2 ]]; then
+    echo "[ERROR]: Expected two argument. "
+    return 1
+  fi
+  
+  return 0
+}
+
+validate_basedir() {
+  declare basedir="$1"
+  
+  if ! ls ${basedir} 1> /dev/null 2> /dev/null ; then
+    echo "[ERROR] No such directory: ${basedir}"
+    return 1
+  fi
+}
+
+changed_files() {
+  declare basedir="$1"
+  declare current_branch="$(git rev-parse --abbrev-ref @)"
+  if [[ ${current_branch} == "master" ]]; then
+    # (apply)
+    # In the master branch, when listing files edited
+    # you need to compare with previous merge commit
+    git diff --name-only "HEAD^" "HEAD" "${basedir}"
+  else
+    # (plan)
+    # In the topic branch, when listing files edited in the branch,
+    # you need to compare with the commit at the time the branch was created
+    # https://git-scm.com/docs/git-merge-base
+    git diff --name-only $(git merge-base origin/HEAD HEAD) "${basedir}"
+  fi
+}
+
+changed_dirs() {
+  declare basedir="${1}"
+  changed_files "${basedir}" | xargs -I% dirname % | sort | uniq
+}
+
+is_there_change() {
+  declare basedir="$1"
+  
+  if [[ $(changed_dirs "${basedir}" | wc -l) -eq 0 ]] ; then
+    return 1
+  fi
+  
+  return 0
+}
+
+exit_if_there_is_no_change () {
+  declare basedir="$1"
+  
+  if is_there_change "${basedir}" ; then
+    return 0
+  fi
+  
+  echo "[INFO] There is no change under ${basedir}"
+  exit 0
+}
+
+show_changed_dirs() {
+  declare basedir="$1"
+  
+  echo "[INFO] Found changes in following dirs:"
+  echo ""
+  for dir in $(changed_dirs "${basedir}") ; do
+    echo "  - ${dir}"
+  done
+  echo ""
+}
+
+changed_chart_dirs() {
+  local basedir=${1}
+  
+  changed_dirs "${basedir}" | awk -F/ '{print $1"/"$2}' | uniq
+}
+
+is_branch_behind_master() {
+  local remote="origin"
+  git fetch --prune "${remote}"
+  
+  local branch="$(git rev-parse --abbrev-ref HEAD)"
+  local rev_list="$(git rev-list --left-right ${branch}...${remote}/master)"
+  
+  local ahead="$(echo "${rev_list}" | grep -c '<')"
+  local behind="$(echo "${rev_list}" | grep -c '>')"
+  
+  echo "[DEBUG] branch name is ${branch} (ahead ${ahead}, behind ${behind})" >&2
+  
+  (( $behind > 0 ))
+  return $?
+}
