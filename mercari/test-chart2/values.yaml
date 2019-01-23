@@ -12,3 +12,4 @@ resources:
     memory: 128Mi
 logLevel: "info"
 githubToken: ""
+
