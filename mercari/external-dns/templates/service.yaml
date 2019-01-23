@@ -32,3 +32,5 @@ spec:
     app: {{ template "external-dns.name" . }}
     release: {{ .Release.Name }}
   type: "{{ .Values.service.type }}"
+
+  
