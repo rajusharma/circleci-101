@@ -1,8 +1,8 @@
 #!/bin/bash
 
 validate_arguments() {
-  if [[ ! -n "$1" ]]; then
-    echo "[ERROR]: Expected a single argument. "
+  if [[ $# -ne 2 ]]; then
+    echo "[ERROR]: Expected 2 arguments. "
     return 1
   fi
   

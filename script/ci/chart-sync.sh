@@ -5,19 +5,19 @@ source "${project_root_dir}/script/ci/_lib"
 
 usage() {
   echo ""
-  echo "Usage: script/ci/repo-sync {base directory of charts} {DEV or PROD}"
+  echo "Usage: script/ci/chart-sync {base directory of charts} {CI env name in which helm repo password is saved}"
   echo ""
-  echo "    Run script/ci/repo-sync to only changed directories under {base directory of charts}"
   echo ""
   echo "Examples:"
-  echo "  $ script/ci/repo-sync mercari DEV"
-  echo "  $ script/ci/repo-sync mercari PROD"
+  echo "  $ script/ci/chart-sync mercari CHARTMUSEUM_PASSWORD_DEV"
+  echo "  $ script/ci/chart-sync mercari CHARTMUSEUM_PASSWORD_PROD"
 }
 
 main() {
   set -euo pipefail
   
-  declare basedir="${1}"
+  declare -r basedir="${1}"
+  declare -r passwordkey="${2}"
   
   # Basic validations before taking any actions
   if ! validate_arguments "${@}"; then
@@ -34,7 +34,7 @@ main() {
   show_changed_dirs "${basedir}"
   # Temporary sync directory from which all the changed charts will be pushed to remote helm repo
   mkdir -p "${basedir}-sync"
-  echo "[INFO] Packaging and Syncing the changed helm charts"
+  echo "[INFO] Packaging the modified helm charts"
   for dir in $(changed_chart_dirs "${basedir}"); do
     if [ -d "${dir}" ]; then
       if helm dependency build "${dir}"; then
@@ -46,18 +46,11 @@ main() {
     fi
   done
   
-  
-  # # Iterate all the chart folder under chart repo and package them
-  # for dir in "$LOCAL_CHARTS_DIR"/*; do
-  #   if helm dependency build "$dir"; then
-  #     helm package --destination "$sync_dir" "$dir"
-  #   else
-  #     log_error "Problem building dependencies. Skipping packaging of '$dir'."
-  #     exit 1
-  #   fi
-  # done
-  # # Sync all packeged charts
-  # gsutil -m rsync -d "$sync_dir" gs://"${GCS_BUCKETNAME}"
+  echo "[INFO] Syncing the modified helm charts"
+  for file in "${basedir}-sync"/*; do
+    echo $file
+    # curl --data-binary @${file} https://mercari:$(eval echo \$${passwordkey})@chartmuseum.dev.citadelapps.com/api/charts
+  done
   
 }
 
