@@ -34,13 +34,15 @@ main() {
   show_changed_dirs "${basedir}"
   # Temporary sync directory from which all the changed charts will be pushed to remote helm repo
   mkdir -p "${basedir}-sync"
-  echo "[INFO] Helm packaging and Syncing charts which are under changed dirs"
+  echo "[INFO] Packaging and Syncing the changed helm charts"
   for dir in $(changed_chart_dirs "${basedir}"); do
-    if helm dependency build "${dir}"; then
-      helm package --destination "${basedir}-sync" "${dir}s"
-    else
-      echo "[ERROR] Problem building dependencies. Skipping packaging of '${dir}'."
-      exit 1
+    if [ -d "${dir}" ]; then
+      if helm dependency build "${dir}"; then
+        helm package --destination "${basedir}-sync" "${dir}"
+      else
+        echo "[ERROR] Problem building dependencies. Skipping packaging of '${dir}'."
+        exit 1
+      fi
     fi
   done
   

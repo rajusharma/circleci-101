@@ -1,0 +1,14 @@
+replicaCount: 1
+image:
+  repository: gcr.io/mercari-artifacts/pull-request-replication-controller
+  tag: 0.1.0
+  pullPolicy: IfNotPresent
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+logLevel: "info"
+githubToken: ""
