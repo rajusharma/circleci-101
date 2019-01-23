@@ -13,8 +13,6 @@ jobs:
               helm lint ${c}
             done
   sync:
-    docker:
-      - image: alpine/helm
     steps:
       - checkout
       - run:
